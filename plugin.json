@@ -1,0 +1,7 @@
+{
+  "name": "aegistrans",
+  "version": "0.2.1",
+  "description": "Translate massive medical textbooks and scientific PDFs into Vietnamese with layout preservation, dual-language terminology retention, and SQLite checkpoint resilience.",
+  "author": "tunah72",
+  "repository": "https://github.com/tunah72/aegistrans"
+}

@@ -6,6 +6,7 @@ description: >-
   modular specialty profiles (dental, general_medicine), and fault-tolerant SQLite checkpointing.
   Use when the user wants to translate medical books, dental textbooks, or academic PDFs, split textbooks
   by chapters, resume interrupted translations, or configure LLM translation gateways.
+license: AGPL-3.0-only
 ---
 
 # AegisTrans: Medical & Scientific PDF Translation Skill
@@ -77,12 +78,12 @@ For quick document translation without API keys:
 Extracts translatable text segments to JSONL for the active agent to translate directly:
 1. **Extract segments**:
    ```bash
-   <python> scripts/translate_pdf.py <input.pdf> --engine handoff --emit-segments segments.jsonl
+   <python> scripts/translate_pdf.py <input.pdf> --engine handoff --emit-segments <segments.jsonl>
    ```
 2. **Translate JSONL**: Translate `src` to `dst` while preserving `<b0></b0>` formula tags.
 3. **Rebuild PDF**:
    ```bash
-   <python> scripts/translate_pdf.py <input.pdf> --engine handoff --segments translations.jsonl --output-dir <output-dir>
+   <python> scripts/translate_pdf.py <input.pdf> --engine handoff --segments <translations.jsonl> --output-dir <output-dir>
    ```
 
 ---

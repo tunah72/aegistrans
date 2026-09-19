@@ -1,6 +1,0 @@
-{
-  "name": "aegistrans",
-  "version": "0.2.1",
-  "description": "Medical & scientific PDF textbook translation with layout preservation, dual-language terminology retention, and SQLite checkpoints.",
-  "author": "tunah72"
-}
