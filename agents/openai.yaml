@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dịch PDF giữ nguyên bố cục"
+  short_description: "Dịch PDF sang tiếng Việt, giữ công thức, bảng và hình"
+  default_prompt: "Use $pdf-translate to translate this PDF into Vietnamese."

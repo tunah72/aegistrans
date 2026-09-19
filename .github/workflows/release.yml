@@ -1,0 +1,62 @@
+name: Release
+
+# Tag the release (e.g. v0.2.0) and this publishes the macOS release.
+# The in-app update check reads the latest tag from this repository.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check the tag matches APP_VERSION
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION=$(python -c 'import re; print(re.search(r"^APP_VERSION = \"(.+)\"", open("app/update.py").read(), re.M).group(1))')
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag $TAG does not match APP_VERSION $VERSION in app/update.py" >&2
+            exit 1
+          fi
+          echo "Releasing $VERSION on macOS"
+
+      - name: Build macOS desktop app
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Upload macOS release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release
+          path: dist/AegisTrans-macos.zip
+          retention-days: 1
+
+  publish:
+    needs: [macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true
+

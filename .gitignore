@@ -1,0 +1,36 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+output/
+tmp/
+dist/
+build/
+app/assets/*.onnx
+app/assets/*.ttf
+app/assets/*.optimized
+
+# Tool caches. .ruff_cache only stayed out of commits because of a global
+# excludes file, which no fresh clone has.
+.ruff_cache/
+
+# What the app itself writes next to the PDFs it is given.
+translated/
+pdf-translate.log
+
+# onnxruntime serialises a 71 MB hardware-specific graph beside any model it
+# loads, and it is only valid on the machine that built it.
+*.optimized
+
+# Editor and OS droppings.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+
+# Textbooks & local documents
+books/

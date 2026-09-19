@@ -1,0 +1,96 @@
+{"en": "pathophysiology", "vi": "sinh lý bệnh", "notes": ""}
+{"en": "etiology", "vi": "nguyên nhân", "notes": "etiology / cause"}
+{"en": "pathogenesis", "vi": "cơ chế sinh bệnh", "notes": ""}
+{"en": "differential diagnosis", "vi": "chẩn đoán phân biệt", "notes": ""}
+{"en": "clinical examination", "vi": "khám lâm sàng", "notes": ""}
+{"en": "physical examination", "vi": "khám thực thể", "notes": ""}
+{"en": "medical history", "vi": "tiền sử bệnh", "notes": "anamnesis"}
+{"en": "vital signs", "vi": "dấu hiệu sinh tồn", "notes": ""}
+{"en": "blood pressure", "vi": "huyết áp", "notes": "BP"}
+{"en": "heart rate", "vi": "nhịp tim", "notes": "HR"}
+{"en": "respiratory rate", "vi": "nhịp thở", "notes": "RR"}
+{"en": "body temperature", "vi": "thân nhiệt", "notes": ""}
+{"en": "oxygen saturation", "vi": "độ bão hòa oxy", "notes": "SpO2"}
+{"en": "palpation", "vi": "sờ nắn", "notes": ""}
+{"en": "percussion", "vi": "gõ", "notes": "diagnostic technique"}
+{"en": "auscultation", "vi": "nghe", "notes": "diagnostic technique"}
+{"en": "inspection", "vi": "nhìn", "notes": "diagnostic technique"}
+{"en": "prognosis", "vi": "tiên lượng", "notes": ""}
+{"en": "morbidity", "vi": "tỷ lệ mắc bệnh", "notes": ""}
+{"en": "mortality", "vi": "tỷ lệ tử vong", "notes": ""}
+{"en": "acute", "vi": "cấp tính", "notes": ""}
+{"en": "chronic", "vi": "mạn tính", "notes": ""}
+{"en": "recurrent", "vi": "tái phát", "notes": ""}
+{"en": "remission", "vi": "thuyên giảm", "notes": ""}
+{"en": "exacerbation", "vi": "đợt bùng phát", "notes": "acute flare-up"}
+{"en": "cardiovascular system", "vi": "hệ tim mạch", "notes": ""}
+{"en": "myocardium", "vi": "cơ tim", "notes": ""}
+{"en": "endocardium", "vi": "nội tâm mạc", "notes": ""}
+{"en": "pericardium", "vi": "màng ngoài tim", "notes": ""}
+{"en": "myocardial infarction", "vi": "nhồi máu cơ tim", "notes": "MI"}
+{"en": "heart failure", "vi": "suy tim", "notes": "HF"}
+{"en": "hypertension", "vi": "tăng huyết áp", "notes": "HTN"}
+{"en": "arrhythmia", "vi": "rối loạn nhịp tim", "notes": ""}
+{"en": "atherosclerosis", "vi": "xơ vữa động mạch", "notes": ""}
+{"en": "respiratory system", "vi": "hệ hô hấp", "notes": ""}
+{"en": "alveoli", "vi": "phế nang", "notes": ""}
+{"en": "bronchi", "vi": "phế quản", "notes": ""}
+{"en": "dyspnea", "vi": "khó thở", "notes": "shortness of breath"}
+{"en": "pneumonia", "vi": "viêm phổi", "notes": ""}
+{"en": "chronic obstructive pulmonary disease", "vi": "bệnh phổi tắc nghẽn mạn tính", "notes": "COPD"}
+{"en": "pulmonary embolism", "vi": "thuyên tắc phổi", "notes": "PE"}
+{"en": "gastrointestinal tract", "vi": "đường tiêu hóa", "notes": "GI tract"}
+{"en": "esophagus", "vi": "thực quản", "notes": ""}
+{"en": "peritoneum", "vi": "phúc mạc", "notes": ""}
+{"en": "cirrhosis", "vi": "xơ gan", "notes": ""}
+{"en": "hepatitis", "vi": "viêm gan", "notes": ""}
+{"en": "pancreatitis", "vi": "viêm tụy", "notes": ""}
+{"en": "peptic ulcer", "vi": "loét dạ dày tá tràng", "notes": "PUD"}
+{"en": "renal failure", "vi": "suy thận", "notes": "kidney failure"}
+{"en": "glomerular filtration rate", "vi": "mức lọc cầu thận", "notes": "GFR"}
+{"en": "nephron", "vi": "nephron", "notes": "functional unit of kidney"}
+{"en": "urinary tract infection", "vi": "nhiễm khuẩn đường tiết niệu", "notes": "UTI"}
+{"en": "central nervous system", "vi": "hệ thần kinh trung ương", "notes": "CNS"}
+{"en": "peripheral nervous system", "vi": "hệ thần kinh ngoại biên", "notes": "PNS"}
+{"en": "cerebrovascular accident", "vi": "tai biến mạch máu não", "notes": "stroke"}
+{"en": "ischemic stroke", "vi": "đột quỵ thiếu máu cục bộ", "notes": ""}
+{"en": "hemorrhagic stroke", "vi": "đột quỵ xuất huyết não", "notes": ""}
+{"en": "endocrine system", "vi": "hệ nội tiết", "notes": ""}
+{"en": "diabetes mellitus", "vi": "đái tháo đường", "notes": "DM"}
+{"en": "hyperglycemia", "vi": "tăng đường huyết", "notes": ""}
+{"en": "hypoglycemia", "vi": "hạ đường huyết", "notes": ""}
+{"en": "thyroid gland", "vi": "tuyến giáp", "notes": ""}
+{"en": "hyperthyroidism", "vi": "cường giáp", "notes": ""}
+{"en": "hypothyroidism", "vi": "suy giáp", "notes": ""}
+{"en": "adrenal gland", "vi": "tuyến thượng thận", "notes": ""}
+{"en": "hematopoietic system", "vi": "hệ tạo máu", "notes": ""}
+{"en": "anemia", "vi": "thiếu máu", "notes": ""}
+{"en": "leukopenia", "vi": "giảm bạch cầu", "notes": ""}
+{"en": "thrombocytopenia", "vi": "giảm tiểu cầu", "notes": ""}
+{"en": "coagulopathy", "vi": "rối loạn đông máu", "notes": ""}
+{"en": "immune system", "vi": "hệ miễn dịch", "notes": ""}
+{"en": "autoimmune disease", "vi": "bệnh tự miễn", "notes": ""}
+{"en": "inflammation", "vi": "viêm", "notes": ""}
+{"en": "sepsis", "vi": "nhiễm trùng huyết", "notes": ""}
+{"en": "septic shock", "vi": "sốc nhiễm khuẩn", "notes": ""}
+{"en": "pharmacokinetics", "vi": "dược động học", "notes": "PK"}
+{"en": "pharmacodynamics", "vi": "dược lực học", "notes": "PD"}
+{"en": "bioavailability", "vi": "sinh khả dụng", "notes": ""}
+{"en": "half-life", "vi": "thời gian bán thải", "notes": "t1/2"}
+{"en": "adverse effect", "vi": "tác dụng không mong muốn", "notes": "side effect"}
+{"en": "contraindication", "vi": "chống chỉ định", "notes": ""}
+{"en": "indication", "vi": "chỉ định", "notes": ""}
+{"en": "therapeutic window", "vi": "khoảng điều trị", "notes": ""}
+{"en": "dosage", "vi": "liều lượng", "notes": ""}
+{"en": "surgical intervention", "vi": "can thiệp phẫu thuật", "notes": ""}
+{"en": "preoperative", "vi": "tiền phẫu", "notes": "before surgery"}
+{"en": "postoperative", "vi": "hậu phẫu", "notes": "after surgery"}
+{"en": "intraoperative", "vi": "trong phẫu thuật", "notes": ""}
+{"en": "anesthesia", "vi": "gây mê", "notes": "also: gây tê"}
+{"en": "general anesthesia", "vi": "gây mê toàn thân", "notes": ""}
+{"en": "local anesthesia", "vi": "gây tê tại chỗ", "notes": ""}
+{"en": "biopsy", "vi": "sinh thiết", "notes": ""}
+{"en": "histopathology", "vi": "mô bệnh học", "notes": ""}
+{"en": "computed tomography", "vi": "chụp cắt lớp vi tính", "notes": "CT scan"}
+{"en": "magnetic resonance imaging", "vi": "chụp cộng hưởng từ", "notes": "MRI"}
+{"en": "ultrasonography", "vi": "siêu âm", "notes": "ultrasound"}

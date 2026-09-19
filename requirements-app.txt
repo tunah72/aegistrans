@@ -1,0 +1,5 @@
+# Desktop app and packaging, on top of requirements.txt
+-r requirements.txt
+customtkinter==5.2.2
+tkinterdnd2==0.6.3
+pyinstaller==6.11.1
