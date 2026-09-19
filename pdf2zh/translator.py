@@ -90,8 +90,13 @@ class BaseTranslator:
         return self.get_rich_text_left_placeholder(identifier) + self.get_rich_text_right_placeholder(identifier)
 
 
+def normalize_placeholders(text: str) -> str:
+    """Normalize any accidental spaces inside formula placeholder tags, e.g. < b0 > -> <b0>."""
+    return re.sub(r"<\s*(/?)\s*b\s*(\d+)\s*>", r"<\1b\2>", text)
+
+
 class GoogleTranslator(BaseTranslator):
-    """Translate through Google's mobile web endpoint without an API key."""
+    """Translate through Google's endpoints without an API key with multi-tier fallback."""
 
     name = "google"
     lang_map: ClassVar[dict[str, str]] = {"zh": "zh-CN"}
@@ -113,7 +118,7 @@ class GoogleTranslator(BaseTranslator):
             **kwargs,
         )
         self.session = requests.Session()
-        self.endpoint = "https://translate.google.com/m"
+        self.endpoint = "https://clients5.google.com/translate_a/t"
         self.headers = {
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -121,9 +126,60 @@ class GoogleTranslator(BaseTranslator):
             )
         }
 
-    def do_translate(self, text: str) -> str:
+    def _translate_clients5(self, text: str) -> str:
         response = self.session.get(
-            self.endpoint,
+            "https://clients5.google.com/translate_a/t",
+            params={
+                "client": "dict-chrome-ex",
+                "sl": self.lang_in,
+                "tl": self.lang_out,
+                "q": text[:5000],
+            },
+            headers=self.headers,
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        if isinstance(data, list):
+            if data and isinstance(data[0], str):
+                return "".join(data)
+            elif data and isinstance(data[0], list):
+                parts = []
+                for item in data:
+                    if isinstance(item, str):
+                        parts.append(item)
+                    elif isinstance(item, list) and item and isinstance(item[0], str):
+                        parts.append(item[0])
+                return "".join(parts)
+        elif isinstance(data, str):
+            return data
+        raise ValueError(f"Unexpected response format from clients5: {data}")
+
+    def _translate_googleapis(self, text: str) -> str:
+        response = self.session.get(
+            "https://translate.googleapis.com/translate_a/single",
+            params={
+                "client": "dict-chrome-ex",
+                "dt": "t",
+                "sl": self.lang_in,
+                "tl": self.lang_out,
+                "q": text[:5000],
+            },
+            headers=self.headers,
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        if isinstance(data, list) and data and isinstance(data[0], list):
+            parts = [
+                part[0] for part in data[0] if part and len(part) > 0 and isinstance(part[0], str)
+            ]
+            return "".join(parts)
+        raise ValueError(f"Unexpected response format from googleapis: {data}")
+
+    def _translate_mobile_web(self, text: str) -> str:
+        response = self.session.get(
+            "https://translate.google.com/m",
             params={"tl": self.lang_out, "sl": self.lang_in, "q": text[:5000]},
             headers=self.headers,
             timeout=30,
@@ -137,7 +193,23 @@ class GoogleTranslator(BaseTranslator):
         )
         if match is None:
             raise RuntimeError("Google Translate response did not contain a translation result")
-        return remove_control_characters(html.unescape(match.group(1)))
+        return match.group(1)
+
+    def do_translate(self, text: str) -> str:
+        if not text or not text.strip():
+            return text
+        errors = []
+        for method in (self._translate_clients5, self._translate_googleapis, self._translate_mobile_web):
+            try:
+                result = method(text)
+                if result:
+                    result = normalize_placeholders(result)
+                    return remove_control_characters(html.unescape(result))
+            except Exception as e:
+                method_name = getattr(method, "__name__", str(method))
+                errors.append(f"{method_name}: {e}")
+                continue
+        raise RuntimeError(f"All Google Translate endpoints failed: {'; '.join(errors)}")
 
 
 def placeholders(text: str) -> list[str]:
