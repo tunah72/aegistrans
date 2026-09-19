@@ -1,10 +1,10 @@
 ---
-name: pdf-translate
-description: Translate local, text-based PDFs into Vietnamese or another supported Latin-script language while preserving the original layout, formulas, tables, and figures. Use for PDF translation, batch translation, terminology-sensitive handoff translation, or diagnosing incomplete translated output. Do not use for image-only scans that need OCR or targets requiring CJK, right-to-left, or complex-script shaping.
+name: aegistrans
+description: Translate local, text-based PDFs and massive medical textbooks into Vietnamese or another supported Latin-script language while preserving the original layout, formulas, tables, and figures. Features dual-language terminology retention, modular specialty profiles (dental, general_medicine), and fault-tolerant SQLite checkpointing.
 license: AGPL-3.0-only
 ---
 
-# PDF Translate
+# AegisTrans
 
 Translate a PDF with the bundled Code4Life engine. Keep the source file unchanged and produce a separate PDF with the same page structure.
 

@@ -14,6 +14,7 @@ if str(SKILL_ROOT) not in sys.path:
     sys.path.insert(0, str(SKILL_ROOT))
 
 from scripts.merge_pdfs import merge_pdfs
+from pdf2zh.profiles import list_available_profiles, resolve_profile_dir
 
 
 def parse_args(argv=None):
@@ -35,14 +36,15 @@ def parse_args(argv=None):
     parser.add_argument(
         "--final-pdf",
         type=Path,
-        default=SKILL_ROOT / "output" / "OKESON_8th_Edition_Vietnamese.pdf",
-        help="Final merged PDF path (default: output/OKESON_8th_Edition_Vietnamese.pdf)",
+        default=SKILL_ROOT / "output" / "translated_book.pdf",
+        help="Final merged PDF path (default: output/translated_book.pdf)",
     )
+    available = ", ".join(list_available_profiles(SKILL_ROOT)) or "dental, general_medicine"
     parser.add_argument(
         "--profile",
         type=str,
         default="dental",
-        help="Medical profile name ('dental', 'general_medicine') or path (default: dental)",
+        help=f"Medical profile name (available: {available}) or path (default: dental)",
     )
     parser.add_argument(
         "--system-prompt",

@@ -36,6 +36,7 @@ from scripts.translate_pdf import (
     translate_pdf,
     _use_utf8_output,
 )
+from pdf2zh.profiles import list_available_profiles, load_profile
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,8 +53,9 @@ def _parse_args(argv=None):
     parser.add_argument("input_pdf", type=Path, help="Path to the source PDF")
     parser.add_argument("--output-dir", type=Path, required=True,
                         help="Directory for all output files")
+    available = ", ".join(list_available_profiles(SKILL_ROOT)) or "dental, general_medicine"
     parser.add_argument("--profile", type=str, default="dental",
-                        help="Medical profile name (e.g. 'dental', 'general_medicine') or path (default: dental)")
+                        help=f"Medical profile name (available: {available}) or path (default: dental)")
     parser.add_argument("--system-prompt", type=Path,
                         help="Path to a system prompt file for translation")
     parser.add_argument("--glossary", type=Path,
@@ -379,35 +381,29 @@ def main(argv=None) -> int:
     still_missing_path = output_dir / "still_missing.jsonl"
 
     # Resolve profile defaults if system_prompt or glossary not explicitly given
-    profile_path = None
+    profile_assets = None
     if args.profile:
-        candidate = SKILL_ROOT / "medical-translation" / "profiles" / args.profile
-        if candidate.is_dir():
-            profile_path = candidate
-        elif (SKILL_ROOT / "medical-dental-translation").is_dir() and args.profile == "dental":
-            profile_path = SKILL_ROOT / "medical-dental-translation"
-        elif (SKILL_ROOT / args.profile).is_dir():
-            profile_path = SKILL_ROOT / args.profile
-        elif Path(args.profile).is_dir():
-            profile_path = Path(args.profile)
+        profile_assets = load_profile(args.profile, root=SKILL_ROOT)
+        if not profile_assets:
+            available = ", ".join(list_available_profiles(SKILL_ROOT))
+            logger.warning(
+                "Profile '%s' not found. Available profiles in medical-translation/profiles/: [%s]",
+                args.profile, available,
+            )
 
     system_prompt = args.system_prompt
-    if not system_prompt and profile_path:
-        p_prompt = profile_path / "system_prompt.txt"
-        if p_prompt.is_file():
-            system_prompt = p_prompt
+    if not system_prompt and profile_assets and profile_assets.system_prompt:
+        system_prompt = profile_assets.system_prompt
 
     glossary = args.glossary
-    if not glossary and profile_path:
-        p_glossary = profile_path / "glossary_base.jsonl"
-        if p_glossary.is_file():
-            glossary = p_glossary
+    if not glossary and profile_assets and profile_assets.glossary:
+        glossary = profile_assets.glossary
 
     logger.info("=" * 60)
     logger.info("Book Translation Pipeline")
     logger.info("Input: %s", input_pdf)
     logger.info("Output: %s", output_dir)
-    logger.info("Profile: %s (%s)", args.profile, profile_path)
+    logger.info("Profile: %s (%s)", args.profile, profile_assets.dir_path if profile_assets else "custom/none")
     logger.info("System Prompt: %s", system_prompt)
     logger.info("Glossary: %s", glossary)
     logger.info("Model: %s", os.environ.get("LLM_MODEL", "default"))
