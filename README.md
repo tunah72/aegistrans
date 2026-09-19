@@ -1,42 +1,38 @@
 <p align="center">
-  <img src=".github/assets/logo.png" alt="AegisTrans logo" width="160">
+  <img src=".github/assets/logo.png" alt="AegisTrans Logo" width="220">
 </p>
 
 <h1 align="center">AegisTrans</h1>
 
 <p align="center">
-  <strong>Translate massive medical textbooks and scientific literature into Vietnamese and 35+ languages<br>with layout preservation, dual-language terminology retention, and fault-tolerant checkpointing.</strong>
+  <strong>Academic Medical and Scientific PDF Textbook Translation System</strong><br>
+  Preserves publisher typography, mathematical formulas, tables, figures, and bookmarks while retaining dual-language clinical terminology.
 </p>
 
 <p align="center">
-  <a href="https://github.com/tunah72/aegistrans/releases/latest/download/AegisTrans-macos.zip">
-    <img src="https://img.shields.io/badge/DOWNLOAD-macOS_Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download AegisTrans for macOS">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/tunah72/aegistrans/releases/latest"><img src="https://img.shields.io/github/v/release/tunah72/aegistrans?style=flat-square&label=release" alt="Latest Release"></a>
-  <a href="https://github.com/tunah72/aegistrans/releases"><img src="https://img.shields.io/github/downloads/tunah72/aegistrans/total?style=flat-square&label=downloads" alt="Total Downloads"></a>
+  <a href="https://github.com/tunah72/aegistrans/releases/latest"><img src="https://img.shields.io/github/v/release/tunah72/aegistrans?style=flat-square" alt="Latest Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/tunah72/aegistrans?style=flat-square" alt="AGPL-3.0 License"></a>
-  <img src="https://img.shields.io/badge/macOS_App-Apple_Silicon-black?style=flat-square" alt="macOS App">
-  <img src="https://img.shields.io/badge/CLI-Cross--Platform-blue?style=flat-square" alt="Cross-Platform CLI">
+  <img src="https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue?style=flat-square" alt="Python Versions">
+  <img src="https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon)%20%7C%20Linux%20%7C%20Windows-lightgrey?style=flat-square" alt="Platforms">
+  <img src="https://img.shields.io/badge/Agent-Antigravity%20Plugin%20%26%20Skill-teal?style=flat-square" alt="Agent Skill Ready">
 </p>
 
 <p align="center">
-  <a href="#sample-translation-demo">Demo</a> ·
-  <a href="#key-features">Features</a> ·
-  <a href="#quick-start-desktop-app-macos">Desktop App</a> ·
-  <a href="#medical-textbook-translation-cli">Medical Translation</a> ·
-  <a href="#build-from-source">Build</a> ·
-  <a href="#lineage--acknowledgements">Acknowledgements</a> ·
-  <a href="#license--non-commercial-disclaimer">License</a>
+  <a href="#sample-translation-demo">Demo</a> &bull;
+  <a href="#key-capabilities">Capabilities</a> &bull;
+  <a href="#macos-desktop-application">Desktop App</a> &bull;
+  <a href="#medical-textbook-translation-cli">CLI Pipeline</a> &bull;
+  <a href="#agent-skill--plugin">Agent Skill & Plugin</a> &bull;
+  <a href="#building-from-source">Build</a> &bull;
+  <a href="#lineage--acknowledgements">Acknowledgements</a> &bull;
+  <a href="#license--takedown-policy">License</a>
 </p>
 
 ---
 
 ## Sample Translation Demo
 
-Side-by-side comparison from a real medical pilot translation (*Okeson – Management of Temporomandibular Disorders and Occlusion*, Elsevier 8th Edition):
+Below is a side-by-side comparison from a medical textbook pilot (*Okeson – Management of Temporomandibular Disorders and Occlusion*, Elsevier 8th Edition):
 
 <div align="center">
   <table>
@@ -48,53 +44,53 @@ Side-by-side comparison from a real medical pilot translation (*Okeson – Manag
     </thead>
     <tbody>
       <tr>
-        <td valign="top"><img src=".github/assets/page_1_src.png" alt="Original English PDF Page 1" width="100%"/></td>
-        <td valign="top"><img src=".github/assets/page_1_bilingual_v2.png" alt="Vietnamese Translated PDF Page 1" width="100%"/></td>
+        <td valign="top"><img src=".github/assets/page_1_src.png" alt="Original English PDF Page" width="100%"/></td>
+        <td valign="top"><img src=".github/assets/page_1_bilingual_v2.png" alt="Translated Vietnamese PDF Page" width="100%"/></td>
       </tr>
     </tbody>
   </table>
 </div>
 
-> [!TIP]
-> **Key Highlights:**
-> - **Typography & Layout Preservation:** Retains publisher banner headers, section titles, column geometries, figures, and crisp typography without text clipping or irregular overflows.
-> - **Dual-Language Terminology Retention:** Clinical concepts are translated into standard Vietnamese accompanied by the original English term in parentheses (e.g., `xương hàm dưới (mandible)`, `khớp thái dương hàm (temporomandibular joint – TMJ)`, `dây chằng nha chu (periodontal ligament)`). Readers gain immediate contextual understanding while simultaneously mastering international academic terminology.
+### Translation Highlights
+- **Typography and Geometry:** Preserves publisher banner headers, section titles, multi-column geometries, and embedded illustrations without text clipping or abnormal line breaks.
+- **Dual-Language Terminology Retention:** Clinical anatomical, pharmacological, and biomechanical terms are rendered in standardized Vietnamese accompanied by standard English in parentheses upon introduction (e.g., `xương hàm dưới (mandible)`, `khớp thái dương hàm (temporomandibular joint – TMJ)`, `dây chằng nha chu (periodontal ligament)`). This supports concurrent subject-matter comprehension and international terminology learning.
 
 ---
 
-## Key Features
+## Key Capabilities
 
-- **Native macOS Desktop App:** One-click pre-packaged standalone application (`AegisTrans.app` for Apple Silicon). Comes pre-bundled with the ONNX layout model and font assets — no Python runtime or command-line setup required.
-- **Cross-Platform CLI Suite:** Fully supported on macOS, Linux, and Windows via Python CLI for automated batch pipelines and server deployments.
-- **Strict Layout Preservation:** Preserves multi-column flow, mathematical formulas, chemical equations, figures, captions, tables, and document bookmarks.
-- **Academic & Medical Textbook Pipeline:**
-  - **Bilingual Terminology Learning Mode:** Dynamically injects English terms alongside standardized Vietnamese nomenclature.
-  - **Modular Specialty Profiles:** Extensible profile registry under `medical-translation/profiles/` (includes Dentistry/TMD `dental` and General Medicine `general_medicine`).
-  - **Chapter Chunking & Bookmark-Preserving TOC Merging:** Slices massive textbooks into chapter PDFs using bookmark trees and re-merges translated chapters with navigational bookmarks intact.
-  - **Fault-Tolerant SQLite Checkpointing:** Caches sentence-level translations into SQLite. Resumes seamlessly after connection interruptions without re-translating or wasting LLM tokens.
-- **Multiple Translation Engines:**
-  - Zero-config free mode via Google Translate web service for fast drafts.
-  - Advanced LLM gateways (OpenAI GPT-4o, Google Gemini 2.5/3.8 Flash, Anthropic Claude, Ollama, 9router) for nuanced academic accuracy.
+- **Strict Document Layout Preservation:** Automatically detects text blocks, headings, formulas, tables, and figures using an ONNX layout model. Text is re-typeset into target positions using fine-tuned font metrics.
+- **Fault-Tolerant SQLite Checkpointing:** Every translated segment is stored incrementally in a SQLite database (`checkpoint.db`). If translation is interrupted by network failures or power outages, re-running instantly resumes from where it left off without duplicate token consumption.
+- **Modular Medical Specialty Profiles:** Features an extensible profile architecture under `medical-translation/profiles/`:
+  - `dental`: Dentistry, TMD, Occlusion, Craniofacial Anatomy.
+  - `general_medicine`: Internal Medicine, Surgery, Physiology, Pathology, Pharmacology.
+- **Chapter Slicing and Bookmark TOC Reconstruction:** Automatically extracts chapter sub-PDFs from a source book based on its PDF bookmark tree, batch translates chapters, and merges them into a unified textbook with complete bookmark navigation intact.
+- **Unified Tri-Modal Deployment:**
+  - Standalone macOS GUI Application (`AegisTrans.app`)
+  - Cross-platform Python CLI for servers and batch automation
+  - Autonomous AI Agent Skill & Plugin for Antigravity, Claude, ChatGPT, and Cursor
 
 ---
 
-## Quick Start (Desktop App - macOS)
+## macOS Desktop Application
 
-1. **[Download AegisTrans-macos.zip](https://github.com/tunah72/aegistrans/releases/latest/download/AegisTrans-macos.zip)** (~200 MB).
-2. Extract the archive and drag `AegisTrans.app` to your `/Applications` folder.
+Pre-built standalone desktop packages are available for macOS:
+
+1. Download the latest release: **[AegisTrans-macos.zip](https://github.com/tunah72/aegistrans/releases/latest/download/AegisTrans-macos.zip)** (~200 MB).
+2. Decompress the archive and place `AegisTrans.app` in your `/Applications` directory.
 3. Launch `AegisTrans`.
 
 > [!NOTE]
 > **macOS Gatekeeper Notice:**  
-> Because AegisTrans is an independent community project without an expensive Apple Developer ID signature, macOS may display an *"unidentified developer"* or *"app is damaged"* notification on first launch.  
-> - **Option A:** Right-click (or Control-click) `AegisTrans.app` $\rightarrow$ Select **Open** $\rightarrow$ Click **Open**.  
-> - **Option B:** Open Terminal and execute:
+> Because AegisTrans is an independent, non-commercial open-source project without a paid Apple Developer certificate, macOS may prompt an *unidentified developer* notice on first launch:
+> - **Option A:** Right-click `AegisTrans.app` &rarr; Select **Open** &rarr; Confirm **Open**.
+> - **Option B:** Run the quarantine removal command in Terminal:
 >   ```bash
 >   xattr -cr /Applications/AegisTrans.app
 >   ```
 
-### Running on Windows & Linux
-To ensure product integrity and honest open-source practices, binary desktop packages are currently released and verified exclusively for macOS (the maintainer's primary hardware environment). Users on Windows and Linux can execute AegisTrans directly using the Python CLI or run the GUI via:
+### Running on Linux and Windows
+Desktop bundles are currently packaged natively for macOS to ensure verified release quality. Linux and Windows users can execute AegisTrans directly with Python:
 ```bash
 python -m app.gui
 ```
@@ -103,9 +99,9 @@ python -m app.gui
 
 ## Medical Textbook Translation (CLI)
 
-For large textbooks (200–800+ pages), use the dedicated orchestrator suite:
+For long textbooks (200–800+ pages), use the dedicated CLI orchestrator:
 
-### 1. Configure Gateway / API Credentials
+### 1. Environment Configuration
 Create a `.env` file at the repository root (see `.env.example`):
 ```env
 OPENAI_BASE_URL=http://localhost:20128/v1
@@ -113,21 +109,20 @@ OPENAI_API_KEY=your_api_key_or_gateway_token
 LLM_MODEL=ag/gemini-3.8-flash-low
 ```
 
-### 2. Translate a Book with Checkpoint Resume
+### 2. Single Book Translation with Checkpoint Resumption
 ```bash
 python scripts/translate_book.py path/to/textbook.pdf \
-    --output-dir output/my_book \
+    --output-dir output/textbook_output \
     --profile dental \
     --concurrency 2
 ```
-*Available profiles:* `--profile dental` (Dentistry & TMD) or `--profile general_medicine` (Internal Medicine, Surgery, Pharmacology).
 
-### 3. Full Textbook Workflow (Split $\rightarrow$ Batch Translate $\rightarrow$ Merge TOC)
+### 3. Full Textbook Workflow (Split &rarr; Batch Translate &rarr; Merge TOC)
 ```bash
-# Step 1: Split book into chapter PDFs based on PDF bookmarks
+# Step 1: Split source textbook into chapter PDFs based on outline bookmarks
 python scripts/split_pdf_by_chapters.py books/textbook.pdf --output-dir books/chapters
 
-# Step 2: Batch translate all chapters and merge into final book
+# Step 2: Batch translate all chapters and assemble final merged PDF
 python scripts/translate_all_chapters.py \
     --chapters-dir books/chapters \
     --output-dir output/chapters \
@@ -136,26 +131,50 @@ python scripts/translate_all_chapters.py \
     --concurrency 2
 ```
 
+### 4. Zero-Config Google Translate Draft Mode
+For rapid single-document translation without API credentials:
+```bash
+python scripts/translate_pdf.py input.pdf --output-dir output/quick_draft --target-language vi
+```
+
 ---
 
-## Build from Source
+## Agent Skill & Plugin
+
+AegisTrans is structured natively as an **AI Agent Plugin and Skill**:
+
+- **Plugin Manifest:** [`plugin.json`](plugin.json)
+- **Skill Instructions:** [`SKILL.md`](SKILL.md)
+- **Domain Rules:** [`rules/AGENTS.md`](rules/AGENTS.md)
+- **Specialty Profiles:** [`medical-translation/`](medical-translation/)
+
+### Using in Antigravity or Agent-Compatible Environments
+To enable AegisTrans globally across all workspaces on your machine:
+```bash
+ln -s /path/to/AegisTrans ~/.gemini/config/plugins/aegistrans
+```
+AI agents automatically detect `aegistrans` in their skill catalog and can orchestrate book translations, validate formula placeholders, and resume checkpoints autonomously.
+
+---
+
+## Building from Source
 
 ```bash
-# Clone repository
+# 1. Clone repository
 git clone https://github.com/tunah72/aegistrans.git
 cd aegistrans
 
-# Create virtual environment
+# 2. Set up virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies
+# 3. Install dependencies
 pip install -r requirements-app.txt
 
-# Run automated tests
+# 4. Run automated test suite
 python -m unittest discover tests
 
-# Build native macOS desktop application (.app and .zip)
+# 5. Build native macOS application bundle
 ./build.sh
 ```
 
@@ -163,26 +182,26 @@ python -m unittest discover tests
 
 ## Lineage & Acknowledgements
 
-AegisTrans stands on the shoulders of giants in the open-source document processing ecosystem:
+AegisTrans is inspired by and builds upon foundational work in the open-source community:
 
-- **[PDFMathTranslate-next](https://github.com/PDFMathTranslate/PDFMathTranslate-next):** The overarching concept and architectural inspiration originated when discovering this work through Chip Huyen's curated *GoodAIList*.
-- **[VI-Translate](https://github.com/breslee1707/VI-Translate):** Authored by `breslee1707`. Provided the initial Vietnamese localization foundation and desktop UI concepts discovered via Facebook developer communities.
+- **[PDFMathTranslate-next](https://github.com/PDFMathTranslate/PDFMathTranslate-next):** Architectural and conceptual inspiration discovered through Chip Huyen's curated *GoodAIList*.
+- **[VI-Translate](https://github.com/breslee1707/VI-Translate):** Created by `breslee1707`. Provided the initial Vietnamese localization layer and desktop GUI concepts.
 - **[BabelDOC](https://github.com/funstory-ai/BabelDOC):** Powers layout detection via ONNX and font typography assets.
-- **Our Specialized Contribution:** While predecessors focused on general mathematical and scientific documents, AegisTrans is purpose-built for **exhaustive Medical & Dental Textbooks**. It introduces dual-language terminology retention, specialized domain prompts, PDF chapter slicing, bookmark-preserving TOC reconstruction, and SQLite-backed interrupted translation resumption.
+- **AegisTrans Focus:** Purpose-built for **exhaustive Medical & Dental Textbooks**. Introduces dual-language terminology retention, modular clinical profiles, chapter slicing, bookmark-preserving TOC reconstruction, and SQLite-backed interrupted translation resumption.
 
 ---
 
-## License & Non-Commercial Disclaimer
+## License & Takedown Policy
 
 This project is licensed under the **[GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)**.
 
 > [!IMPORTANT]
-> **Community & Non-Commercial Purpose:**  
-> AegisTrans is an independent, non-commercial open-source project created to assist healthcare students, medical practitioners, dentists, and academic researchers in studying international literature. It is distributed free of charge with zero commercial intent.
+> **Non-Commercial Educational Purpose:**  
+> AegisTrans is an independent, non-commercial open-source project created to support medical students, clinical practitioners, dentists, and healthcare researchers. It is provided free of charge with zero commercial intent.
 > 
-> **Notice & Takedown Policy:**  
-> We strictly respect intellectual property rights. If you are a copyright owner, publisher, or author and believe any sample text, graphic, or code snippet in this repository infringes your rights or requires updated attribution, please reach out directly:
+> **Notice and Takedown Policy:**  
+> We strictly respect intellectual property rights. If you are a copyright owner, author, or publisher and believe that any sample document, graphic, or code asset in this repository requires modification or removal, please contact the maintainer directly:
 > - **Maintainer:** [@tunah72](https://github.com/tunah72)
-> - **Issue Tracker:** [GitHub Issues](https://github.com/tunah72/aegistrans/issues)
+> - **Issues:** [GitHub Issue Tracker](https://github.com/tunah72/aegistrans/issues)
 > 
-> All inquiries will be addressed promptly, and requested items will be modified or removed immediately.
+> All inquiries will be addressed promptly, and requested materials will be updated or removed immediately.

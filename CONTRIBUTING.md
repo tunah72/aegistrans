@@ -1,121 +1,165 @@
-# Hướng dẫn đóng góp (Contributing Guide)
+# Contributing to AegisTrans
 
-Cảm ơn bạn đã quan tâm đóng góp cho dự án **AegisTrans**! Dự án được phát triển nhằm cung cấp giải pháp dịch thuật tài liệu học thuật và sách Y khoa chuyên sâu từ tiếng Anh sang tiếng Việt, bảo toàn cấu trúc dàn trang PDF, hỗ trợ giữ nguyên thuật ngữ quốc tế song ngữ `Thuật ngữ tiếng Việt (English term)` và cơ chế lưu vết dịch ngắt quãng (checkpoint resumption) cho các bộ sách Y học dài hàng trăm trang.
+Thank you for your interest in contributing to **AegisTrans**! 
 
----
-
-## 1. Nguồn gốc & Tôn trọng bản quyền (Lineage & Ethics)
-
-AegisTrans được phát triển dựa trên việc kế thừa và học hỏi các dự án mã nguồn mở xuất sắc:
-- **[PDFMathTranslate-next](https://github.com/PDFMathTranslate/PDFMathTranslate-next)**: Ý tưởng khởi nguồn khi tham khảo *GoodAIList* của tác giả Chip Huyen.
-- **[VI-Translate](https://github.com/breslee1707/VI-Translate)**: Phát triển và đóng góp bởi tác giả `breslee1707`, phục vụ dịch thuật tài liệu đa ngữ có giao diện tiếng Việt.
-- **Mục đích cộng đồng & Phi thương mại**: Dự án được tác giả (`tunah72`) xây dựng hoàn toàn vì mục đích học tập, nghiên cứu và hỗ trợ cộng đồng y khoa Việt Nam tiếp cận tri thức y học thế giới. Toàn bộ mã nguồn phát hành miễn phí theo giấy phép **GNU AGPLv3**.
-- **Chính sách liên hệ & Takedown**: Chúng tôi luôn tôn trọng bản quyền của các tác giả gốc và nhà xuất bản. Nếu quý tác giả hoặc nhà xuất bản có bất kỳ thắc mắc, yêu cầu ghi nhận hoặc gỡ bỏ tài liệu mẫu nào, xin vui lòng tạo Issue hoặc liên hệ trực tiếp với maintainer qua GitHub ([@tunah72](https://github.com/tunah72)) để được xử lý ngay lập tức.
+AegisTrans is an open-source initiative dedicated to translating massive medical textbooks and scientific literature into Vietnamese (and other Latin-script languages) while preserving complex multi-column typography, formulas, figures, tables, and bookmarks. It features an integrated dual-language terminology retention mode `Vietnamese term (English term)` and fault-tolerant SQLite checkpoint resumption.
 
 ---
 
-## 2. Thiết lập môi trường phát triển (Development Setup)
+## 1. Lineage, Ethics & Takedown Policy
 
-### Yêu cầu hệ thống
-- **Python**: 3.10 – 3.12 (khuyến nghị Python 3.12).
-- **Hệ điều hành**: macOS (Apple Silicon / Intel) để đóng gói ứng dụng Desktop; hoặc Linux / Windows đối với việc phát triển CLI và thuật toán dịch.
+AegisTrans is built upon and inspired by pioneering open-source projects:
+- **[PDFMathTranslate-next](https://github.com/PDFMathTranslate/PDFMathTranslate-next):** Conceptual inspiration discovered through Chip Huyen's curated *GoodAIList*.
+- **[VI-Translate](https://github.com/breslee1707/VI-Translate):** Authored by `breslee1707`, which provided foundational Vietnamese localization and desktop GUI concepts.
+- **Non-Commercial Educational Mission:** This project is developed by [@tunah72](https://github.com/tunah72) strictly for educational, academic, and clinical learning purposes. It is distributed free of charge under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
+- **Notice & Takedown Policy:** We respect the intellectual property rights of all authors and publishers. If you are a copyright owner and believe any sample text, asset, or reference in this repository infringes upon your rights, please open an Issue or contact the maintainer directly. Any identified items will be reviewed and removed or updated immediately.
 
-### Cài đặt
+---
+
+## 2. Development Setup
+
+### System Prerequisites
+- **Python**: 3.10 – 3.12 (Python 3.12 recommended).
+- **Operating System**: macOS (Apple Silicon / Intel) for desktop packaging; Linux, macOS, or Windows for core engine, CLI, and profile development.
+
+### Installation
 ```bash
-# Clone repository
+# 1. Clone the repository
 git clone https://github.com/tunah72/aegistrans.git
 cd aegistrans
 
-# Khởi tạo virtual environment
+# 2. Create and activate a virtual environment
 python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .\.venv\Scripts\Activate.ps1
 
-# Kích hoạt virtual environment
-source .venv/bin/activate
-
-# Cài đặt dependencies (bao gồm core, desktop app và công cụ đóng gói)
+# 3. Install core, GUI, and packaging dependencies
 pip install -r requirements-app.txt
+
+# 4. (Optional) Set up LLM API credentials for medical translation
+cp .env.example .env
+# Edit .env with your OpenAI-compatible API base URL and token
 ```
 
 ---
 
-## 3. Kiểm thử tự động (Running Tests)
+## 3. Automated Testing
 
-Trước khi gửi pull request hoặc commit, hãy đảm bảo toàn bộ bộ test suite chạy thành công:
+Before opening a pull request or committing changes, ensure that all automated tests pass:
 
 ```bash
 python -m unittest discover tests
 ```
 
-Tất cả các module cốt lõi đều có unit test tương ứng trong thư mục `tests/`:
-- `test_openai_translator.py`: Kiểm thử bộ dịch LLM (OpenAI, Gemini, 9router).
-- `test_checkpoint.py`: Kiểm thử cơ chế lưu vết dịch ngắt quãng SQLite.
-- `test_glossary.py`: Kiểm thử nạp và đối soát thuật ngữ chuyên ngành Y khoa.
-- `test_validation.py`: Kiểm thử bảo vệ công thức toán học `<b0></b0>`.
-- `test_app_gui.py`: Kiểm thử các hàm logic của giao diện desktop.
+### Test Suite Overview
+- `tests/test_profiles.py`: Validates discovery, asset loading, and syntax of medical specialty profiles.
+- `tests/test_checkpoint.py`: Tests SQLite-backed interrupted translation storage and resumption.
+- `tests/test_glossary.py`: Tests terminology lookup, persistence, and prompt injection.
+- `tests/test_openai_translator.py`: Tests LLM translation gateways and network resilience.
+- `tests/test_validation.py`: Tests formula placeholder `<b0></b0>` integrity enforcement.
+- `tests/test_app_gui.py`: Tests desktop UI event dispatching and helper routines.
+- `tests/test_preservation_rules.py`: Tests font, layout, and document structure preservation rules.
 
 ---
 
-## 4. Đóng gói ứng dụng Desktop trên macOS (`build.sh`)
+## 4. Codebase Architecture
 
-Do môi trường phát triển chính của tác giả là macOS, ứng dụng desktop AegisTrans hiện được đóng gói, tối ưu và kiểm thử chính thức trên **macOS**:
-
-```bash
-# Đóng gói tạo dist/AegisTrans.app và nén thành dist/AegisTrans-macos.zip
-./build.sh
+```text
+AegisTrans/
+├── plugin.json                  # Antigravity plugin manifest
+├── SKILL.md                     # Agent skill runbook and instructions
+├── rules/
+│   └── AGENTS.md                # Agent translation guidelines and terminology constraints
+├── medical-translation/
+│   ├── README.md                # Medical profiles architecture documentation
+│   └── profiles/
+│       ├── dental/              # Dentistry, TMD, Occlusion, Craniofacial Anatomy
+│       └── general_medicine/    # Internal Medicine, Surgery, Physiology, Pharmacology
+├── pdf2zh/                      # Core translation engine
+│   ├── profiles.py              # Profile discovery, loading, and validation
+│   ├── checkpoint.py            # SQLite state management
+│   ├── glossary.py              # Terminology glossary manager
+│   ├── doclayout.py             # ONNX page layout analysis
+│   ├── pdfinterp.py             # PDF text extraction and typography mapping
+│   ├── converter.py             # PDF rebuild and font rendering
+│   └── translator.py            # Translation engine interfaces
+├── scripts/
+│   ├── translate_book.py        # Single textbook translation with checkpoint resume
+│   ├── split_pdf_by_chapters.py # Splits books by PDF bookmark outlines
+│   ├── translate_all_chapters.py# Batch chapter translator with TOC-preserving merger
+│   └── translate_pdf.py         # Single-document CLI runner
+└── app/                         # Desktop GUI application (Tkinter / PyInstaller)
 ```
 
-*Tùy chọn hữu ích:*
+---
+
+## 5. Contributing a New Medical Specialty Profile
+
+AegisTrans uses an extensible profile registry under `medical-translation/profiles/<specialty>/`.
+
+To contribute a new specialty (e.g., `cardiology`, `pediatrics`, `neurology`):
+
+1. **Create the profile directory:**
+   ```bash
+   mkdir -p medical-translation/profiles/cardiology
+   ```
+2. **Author `system_prompt.txt`:**
+   Define clinical translation standards, domain terminology rules, and ensure the prompt enforces dual-language retention:
+   $$\text{Vietnamese term (English term)}$$
+3. **Curate `glossary_base.jsonl`:**
+   Add validated seed terminology pairs in JSON Lines format:
+   ```json
+   {"en": "myocardial infarction", "vi": "nhồi máu cơ tim", "notes": "MI"}
+   {"en": "atrial fibrillation", "vi": "rung nhĩ", "notes": "AF"}
+   ```
+4. **Validate the profile:**
+   Run the automated test suite to confirm your profile passes structure and JSON syntax verification:
+   ```bash
+   python -m unittest tests/test_profiles.py
+   ```
+
+---
+
+## 6. Packaging Desktop Releases (macOS)
+
+Desktop releases are built natively on macOS via `./build.sh`:
+
 ```bash
-# Bỏ qua tải lại model ONNX nếu đã có trong app/assets/
+# Build standalone AegisTrans.app and package AegisTrans-macos.zip
+./build.sh
+
+# Fast build (skipping ONNX model and font downloads if already cached)
 ./build.sh --skip-assets
 
-# Dọn dẹp cache và thư mục dist/
+# Clean previous build artifacts
 ./build.sh --clean
 ```
 
-> **Lưu ý về tính trung thực và các nền tảng khác:**
-> Để đảm bảo tính trung thực và chất lượng sản phẩm công bố, dự án không tạo bản phát hành desktop tự động cho Windows nếu chưa được kiểm thử thực tế trên máy vật lý Windows. Người dùng trên Windows và Linux hoàn toàn có thể sử dụng đầy đủ sức mạnh của AegisTrans thông qua giao diện dòng lệnh Python CLI (`scripts/translate_pdf.py`, `scripts/translate_book.py`) hoặc chạy trực tiếp `python -m app.gui`.
+> **Platform Transparency Note:**  
+> Because the maintainer's primary workstation is macOS, standalone `.app` bundles are built and verified exclusively for macOS. Linux and Windows users are encouraged to run AegisTrans directly via Python CLI (`python scripts/translate_book.py`) or launch the GUI via `python -m app.gui`.
 
 ---
 
-## 5. Đóng góp Profile chuyên khoa Y học mới (Medical Profiles)
+## 7. Versioning & Release Process
 
-AegisTrans sử dụng kiến trúc profile mở tại thư mục `medical-translation/profiles/`:
-
-```
-medical-translation/profiles/
-├── dental/                      # Răng Hàm Mặt, Khớp cắn, Rối loạn TMD
-│   ├── system_prompt.txt
-│   └── glossary_base.jsonl
-└── general_medicine/            # Nội khoa, Ngoại khoa, Sinh lý, Dược lý
-    ├── system_prompt.txt
-    └── glossary_base.jsonl
-```
-
-### Cách tạo thêm chuyên khoa mới (ví dụ: Tim mạch - `cardiology`):
-1. Tạo thư mục `medical-translation/profiles/cardiology/`.
-2. Định nghĩa `system_prompt.txt`: Mô tả phong cách học thuật, quy tắc chuẩn hóa thuật ngữ và phong cách song ngữ `Thuật ngữ tiếng Việt (English term)`.
-3. Bổ sung `glossary_base.jsonl`: Danh mục thuật ngữ chuẩn dạng JSON Lines:
-   ```json
-   {"en": "myocardial infarction", "vi": "nhồi máu cơ tim", "notes": "MI"}
-   {"en": "heart failure", "vi": "suy tim", "notes": "HF"}
-   ```
-4. Chạy kiểm thử dịch với profile mới:
-   ```bash
-   python scripts/translate_book.py input.pdf --output-dir output/book --profile cardiology
-   ```
-
----
-
-## 6. Quy trình phát hành phiên bản (Release Process)
-
-1. Cập nhật số phiên bản trong `app/update.py`:
+1. Increment `APP_VERSION` in `app/update.py` following [Semantic Versioning](https://semver.org):
    ```python
-   APP_VERSION = "0.2.1"
+   APP_VERSION = "0.2.2"
    ```
-2. Cập nhật `README.md` hoặc changelog.
-3. Tạo git tag trùng khớp với `APP_VERSION`:
+2. Update `README.md` or changelog notes as necessary.
+3. Commit the version bump and create an annotated git tag:
    ```bash
-   git tag v0.2.1
+   git tag v0.2.2
    ```
-4. Workflow `.github/workflows/release.yml` sẽ tự động đóng gói bản macOS native (`AegisTrans-macos.zip`) và xuất bản GitHub Release.
+4. The `.github/workflows/release.yml` GitHub Actions pipeline will automatically:
+   - Validate tag consistency against `app/update.py`.
+   - Build `AegisTrans.app` on `macos-latest`.
+   - Compress the application into `dist/AegisTrans-macos.zip`.
+   - Publish a new GitHub Release with the bundled archive.
+
+---
+
+## 8. Maintainer Contact
+
+For technical questions, suggestions, or takedown notices, please open a GitHub Issue or reach out to:
+- **Maintainer:** [@tunah72](https://github.com/tunah72)
+- **Repository:** [https://github.com/tunah72/aegistrans](https://github.com/tunah72/aegistrans)
