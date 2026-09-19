@@ -94,15 +94,20 @@ def step_extract_segments(
     pages: str | None = None,
     threads: int = 4,
     overwrite: bool = False,
-) -> int:
-    """Extract translatable segments from PDF using handoff engine pass 1."""
+) -> tuple[int, float, bool]:
+    """Extract translatable segments from PDF using handoff engine pass 1.
+
+    Returns (segment_count, elapsed_seconds, was_cached).
+    """
     logger.info("=== Step 1: Extracting segments from %s ===", input_pdf.name)
+    t0 = time.perf_counter()
 
     if segments_path.exists() and not overwrite:
         count = sum(1 for line in segments_path.open(encoding="utf-8") if line.strip())
         if count > 0:
-            logger.info("Segments file already exists with %d segments, reusing", count)
-            return count
+            elapsed = time.perf_counter() - t0
+            logger.info("Segments file already exists with %d segments, reusing (%.2fs)", count, elapsed)
+            return count, elapsed, True
 
     translate_pdf(
         input_pdf,
@@ -116,9 +121,10 @@ def step_extract_segments(
         overwrite=True,
     )
 
+    elapsed = time.perf_counter() - t0
     count = sum(1 for line in segments_path.open(encoding="utf-8") if line.strip())
-    logger.info("Extracted %d segments", count)
-    return count
+    logger.info("Extracted %d segments in %.2fs", count, elapsed)
+    return count, elapsed, False
 
 
 def step_translate_segments(
@@ -134,12 +140,18 @@ def step_translate_segments(
     request_interval: float = 0.5,
     batch_size: int = 50,
     force_retranslate: bool = False,
-) -> dict:
-    """Translate segments via OpenAI-compatible LLM with checkpointing."""
+) -> tuple[dict, float]:
+    """Translate segments via OpenAI-compatible LLM with checkpointing.
+
+    Returns (stats_dict, elapsed_seconds).
+    """
+    import threading
+    from concurrent.futures import ThreadPoolExecutor, as_completed
     from pdf2zh.checkpoint import TranslationCheckpoint
     from pdf2zh.validation import validate_translation
 
     logger.info("=== Step 2: Translating segments ===")
+    t0 = time.perf_counter()
 
     # Load segments
     segments = []
@@ -152,7 +164,7 @@ def step_translate_segments(
 
     if not segments:
         logger.warning("No segments to translate")
-        return {"total": 0, "completed": 0, "failed": 0}
+        return {"total": 0, "completed": 0, "failed": 0}, time.perf_counter() - t0
 
     logger.info("Total segments: %d", len(segments))
 
@@ -183,7 +195,8 @@ def step_translate_segments(
         checkpoint.export_translations(translations_path)
         total_stats = checkpoint.get_stats()
         checkpoint.close()
-        return total_stats
+        elapsed = time.perf_counter() - t0
+        return total_stats, elapsed
 
     logger.info("Segments to translate: %d", len(pending))
 
@@ -214,96 +227,144 @@ def step_translate_segments(
     # Validation log
     validation_log = output_dir / "validation.log"
 
-    # Translate with batching
+    val_lock = threading.Lock()
+    counter_lock = threading.Lock()
     translated_count = 0
     failed_count = 0
-    start_time = time.time()
+    total_pending = len(pending)
+    start_time = time.perf_counter()
 
-    for batch_start in range(0, len(pending), batch_size):
-        batch = pending[batch_start:batch_start + batch_size]
-        batch_num = batch_start // batch_size + 1
-        total_batches = (len(pending) + batch_size - 1) // batch_size
+    def _translate_one(seg) -> tuple[str, int, str | None]:
+        nonlocal translated_count, failed_count
+        seg_id = seg.segment_id
+        source = seg.source_text
 
-        logger.info(
-            "Batch %d/%d (%d segments)",
-            batch_num, total_batches, len(batch),
-        )
-
-        for seg in batch:
-            seg_id = seg.segment_id
-            source = seg.source_text
-
-            # Skip very short segments (single chars, whitespace)
-            if not source.strip() or len(source.strip()) < 2:
-                checkpoint.mark_completed(seg_id, source, model="skip")
+        # Skip very short segments (single chars, whitespace)
+        if not source.strip() or len(source.strip()) < 2:
+            checkpoint.mark_completed(seg_id, source, model="skip")
+            with counter_lock:
                 translated_count += 1
-                continue
+            return "skipped", seg_id, None
 
+        retries = 0
+        while retries <= max_retries:
             try:
                 translation = translator.do_translate(source)
 
                 # Validate
                 vresult = validate_translation(seg_id, source, translation)
                 if vresult.errors:
-                    # Critical validation failure
                     error_msg = "; ".join(vresult.errors)
                     logger.warning("Segment %d validation error: %s", seg_id, error_msg)
                     checkpoint.mark_failed(seg_id, f"validation: {error_msg}")
-                    failed_count += 1
-
-                    with open(validation_log, "a", encoding="utf-8") as vf:
-                        vf.write(f"SEGMENT {seg_id} ERROR: {error_msg}\n")
-                        vf.write(f"  SOURCE: {source[:200]}\n")
-                        vf.write(f"  TRANSLATION: {translation[:200]}\n\n")
-                    continue
+                    with val_lock:
+                        with open(validation_log, "a", encoding="utf-8") as vf:
+                            vf.write(f"SEGMENT {seg_id} ERROR: {error_msg}\n")
+                            vf.write(f"  SOURCE: {source[:200]}\n")
+                            vf.write(f"  TRANSLATION: {translation[:200]}\n\n")
+                    with counter_lock:
+                        failed_count += 1
+                    return "failed", seg_id, error_msg
 
                 if vresult.warnings:
-                    with open(validation_log, "a", encoding="utf-8") as vf:
-                        for w in vresult.warnings:
-                            vf.write(f"SEGMENT {seg_id} WARNING: {w}\n")
+                    with val_lock:
+                        with open(validation_log, "a", encoding="utf-8") as vf:
+                            for w in vresult.warnings:
+                                vf.write(f"SEGMENT {seg_id} WARNING: {w}\n")
 
                 checkpoint.mark_completed(
                     seg_id, translation,
                     model=translator.model or "",
                 )
-                translated_count += 1
-
-                if translated_count % 10 == 0:
-                    elapsed = time.time() - start_time
-                    rate = translated_count / elapsed if elapsed > 0 else 0
-                    logger.info(
-                        "Progress: %d/%d translated (%.1f seg/min), %d failed",
-                        translated_count, len(pending), rate * 60, failed_count,
-                    )
+                with counter_lock:
+                    translated_count += 1
+                return "completed", seg_id, None
 
             except KeyboardInterrupt:
-                logger.info("Interrupted! Progress saved to checkpoint.")
-                break
+                raise
             except Exception as e:
                 error_msg = f"{type(e).__name__}: {e}"
-                logger.error("Segment %d failed: %s", seg_id, error_msg)
-                checkpoint.mark_failed(seg_id, error_msg)
-                failed_count += 1
+                retries += 1
+                if retries <= max_retries:
+                    backoff = min(2 ** retries, 15)
+                    logger.warning(
+                        "Segment %d failed (attempt %d/%d): %s. Backing off %ds...",
+                        seg_id, retries, max_retries, error_msg, backoff,
+                    )
+                    time.sleep(backoff)
+                else:
+                    logger.error("Segment %d failed after %d retries: %s", seg_id, max_retries, error_msg)
+                    checkpoint.mark_failed(seg_id, error_msg)
+                    with counter_lock:
+                        failed_count += 1
+                    return "failed", seg_id, error_msg
+        return "failed", seg_id, "exhausted retries"
 
-                # Exponential backoff on failure
-                backoff = min(2 ** seg.retry_count, 30)
-                logger.info("Backing off %ds after failure", backoff)
-                time.sleep(backoff)
+    logger.info(
+        "Translating %d segments (concurrency=%d, request_interval=%.2fs)...",
+        total_pending, concurrency, request_interval,
+    )
+
+    try:
+        if concurrency > 1:
+            with ThreadPoolExecutor(max_workers=concurrency) as executor:
+                futures = {executor.submit(_translate_one, seg): seg for seg in pending}
+                for future in as_completed(futures):
+                    try:
+                        future.result()
+                    except KeyboardInterrupt:
+                        logger.info("Interrupted! Cancelling pending tasks...")
+                        executor.shutdown(wait=False, cancel_futures=True)
+                        break
+
+                    with counter_lock:
+                        done = translated_count + failed_count
+                        cur_trans = translated_count
+                        cur_fail = failed_count
+
+                    if done % 10 == 0 or done == total_pending:
+                        elapsed_so_far = time.perf_counter() - start_time
+                        rate = done / elapsed_so_far if elapsed_so_far > 0 else 0
+                        remaining = total_pending - done
+                        eta = (remaining / rate) if rate > 0 else 0
+                        logger.info(
+                            "Progress: %d/%d processed (%d ok, %d fail) | Rate: %.1f seg/min | Elapsed: %.1fs | ETA: %.0fs",
+                            done, total_pending, cur_trans, cur_fail, rate * 60, elapsed_so_far, eta,
+                        )
+        else:
+            for seg in pending:
+                _translate_one(seg)
+                with counter_lock:
+                    done = translated_count + failed_count
+                    cur_trans = translated_count
+                    cur_fail = failed_count
+
+                if done % 10 == 0 or done == total_pending:
+                    elapsed_so_far = time.perf_counter() - start_time
+                    rate = done / elapsed_so_far if elapsed_so_far > 0 else 0
+                    remaining = total_pending - done
+                    eta = (remaining / rate) if rate > 0 else 0
+                    logger.info(
+                        "Progress: %d/%d processed (%d ok, %d fail) | Rate: %.1f seg/min | Elapsed: %.1fs | ETA: %.0fs",
+                        done, total_pending, cur_trans, cur_fail, rate * 60, elapsed_so_far, eta,
+                    )
+    except KeyboardInterrupt:
+        logger.info("Interrupted! Progress saved to checkpoint.")
 
     # Export completed translations
     exported = checkpoint.export_translations(translations_path)
     logger.info("Exported %d translations to %s", exported, translations_path)
 
     final_stats = checkpoint.get_stats()
-    elapsed = time.time() - start_time
+    elapsed = time.perf_counter() - t0
     logger.info(
-        "Translation complete in %.0fs: %s",
+        "Translation step finished in %.2fs: %s",
         elapsed, json.dumps(final_stats),
     )
 
     checkpoint.close()
     logger.removeHandler(file_handler)
-    return final_stats
+    return final_stats, elapsed
 
 
 def step_rebuild_pdf(
@@ -317,13 +378,17 @@ def step_rebuild_pdf(
     pages: str | None = None,
     threads: int = 4,
     overwrite: bool = False,
-) -> Path | None:
-    """Rebuild the translated PDF using handoff engine pass 2."""
+) -> tuple[Path | None, float]:
+    """Rebuild the translated PDF using handoff engine pass 2.
+
+    Returns (output_pdf_path, elapsed_seconds).
+    """
     logger.info("=== Step 3: Rebuilding translated PDF ===")
+    t0 = time.perf_counter()
 
     if not translations_path.exists():
         logger.error("Translations file not found: %s", translations_path)
-        return None
+        return None, time.perf_counter() - t0
 
     count = sum(1 for line in translations_path.open(encoding="utf-8") if line.strip())
     logger.info("Using %d translations for rebuild", count)
@@ -341,8 +406,9 @@ def step_rebuild_pdf(
         overwrite=overwrite,
     )
 
+    elapsed = time.perf_counter() - t0
     if result.path:
-        logger.info("Translated PDF: %s", result.path)
+        logger.info("Translated PDF: %s (generated in %.2fs)", result.path, elapsed)
         if result.untranslated:
             logger.warning("%d segments still untranslated", result.untranslated)
 
@@ -357,13 +423,14 @@ def step_rebuild_pdf(
                     still_missing_path, remaining,
                 )
     else:
-        logger.error("No output PDF was generated")
+        logger.error("No output PDF was generated (elapsed: %.2fs)", elapsed)
 
-    return result.path
+    return result.path, elapsed
 
 
 def main(argv=None) -> int:
     _use_utf8_output()
+    total_start = time.perf_counter()
     args = _parse_args(argv)
 
     input_pdf = args.input_pdf.expanduser().resolve()
@@ -407,6 +474,7 @@ def main(argv=None) -> int:
     logger.info("System Prompt: %s", system_prompt)
     logger.info("Glossary: %s", glossary)
     logger.info("Model: %s", os.environ.get("LLM_MODEL", "default"))
+    logger.info("Concurrency: %d (request interval: %.2fs)", args.concurrency, args.request_interval)
     logger.info("=" * 60)
 
     if args.force_retranslate:
@@ -419,7 +487,7 @@ def main(argv=None) -> int:
 
     try:
         # Step 1: Extract segments
-        segment_count = step_extract_segments(
+        segment_count, t1_elapsed, cached = step_extract_segments(
             input_pdf, output_dir, segments_path,
             target_language=args.target_language,
             source_language=args.source_language,
@@ -433,7 +501,7 @@ def main(argv=None) -> int:
             return 1
 
         # Step 2: Translate segments
-        stats = step_translate_segments(
+        stats, t2_elapsed = step_translate_segments(
             segments_path, output_dir, translations_path, checkpoint_path,
             system_prompt=system_prompt,
             glossary=glossary,
@@ -444,14 +512,14 @@ def main(argv=None) -> int:
             force_retranslate=args.force_retranslate,
         )
 
-        logger.info("Translation stats: %s", json.dumps(stats))
-
         if args.skip_rebuild:
             logger.info("Skipping PDF rebuild (--skip-rebuild)")
+            total_elapsed = time.perf_counter() - total_start
+            print(f"\n[Done] Step 2 complete in {t2_elapsed:.2f}s. Rebuild skipped.\n")
             return 0
 
         # Step 3: Rebuild PDF
-        result_path = step_rebuild_pdf(
+        result_path, t3_elapsed = step_rebuild_pdf(
             input_pdf, output_dir, translations_path, still_missing_path,
             target_language=args.target_language,
             source_language=args.source_language,
@@ -459,6 +527,39 @@ def main(argv=None) -> int:
             threads=args.threads,
             overwrite=args.overwrite,
         )
+
+        total_elapsed = time.perf_counter() - total_start
+        total_mins = int(total_elapsed // 60)
+        total_secs = total_elapsed % 60
+
+        completed = stats.get("completed", 0)
+        failed = stats.get("failed", 0)
+        total_seg = stats.get("total", segment_count)
+        rate = (completed / t2_elapsed * 60) if t2_elapsed > 0 else 0
+
+        p1 = (t1_elapsed / total_elapsed * 100) if total_elapsed > 0 else 0
+        p2 = (t2_elapsed / total_elapsed * 100) if total_elapsed > 0 else 0
+        p3 = (t3_elapsed / total_elapsed * 100) if total_elapsed > 0 else 0
+
+        cache_str = "reused from cache" if cached else "extracted new"
+        rebuild_str = f"{result_path.name}" if result_path else "Failed"
+
+        timing_summary = [
+            "",
+            "=" * 74,
+            "                 STAGE EXECUTION TIMING & PERFORMANCE SUMMARY",
+            "=" * 74,
+            f"  • Step 1: Segment Extraction   : {t1_elapsed:7.2f}s ({p1:5.1f}%)  [{segment_count} segments ({cache_str})]",
+            f"  • Step 2: LLM Translation      : {t2_elapsed:7.2f}s ({p2:5.1f}%)  [{completed}/{total_seg} ok, {failed} fail, {rate:.1f} seg/min]",
+            f"  • Step 3: PDF Rebuild & Layout : {t3_elapsed:7.2f}s ({p3:5.1f}%)  [{rebuild_str}]",
+            "-" * 74,
+            f"  • Total End-to-End Elapsed     : {total_elapsed:7.2f}s (100.0%)  [{total_mins}m {total_secs:04.1f}s total]",
+            "=" * 74,
+            "",
+        ]
+        for line in timing_summary:
+            logger.info(line)
+            print(line)
 
         # Final report
         logger.info("=" * 60)

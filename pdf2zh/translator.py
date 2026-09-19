@@ -342,6 +342,7 @@ class OpenAITranslator(BaseTranslator):
         # Rate limiting
         self._last_request_time = 0.0
         self._min_request_interval = float(envs.get("request_interval", "0.5"))
+        self._rate_lock = threading.Lock()
 
         if OpenAI is None:
             raise ImportError(
@@ -393,11 +394,12 @@ class OpenAITranslator(BaseTranslator):
 
     def _rate_limit(self) -> None:
         """Enforce minimum interval between API requests."""
-        now = time.monotonic()
-        elapsed = now - self._last_request_time
-        if elapsed < self._min_request_interval:
-            time.sleep(self._min_request_interval - elapsed)
-        self._last_request_time = time.monotonic()
+        with self._rate_lock:
+            now = time.monotonic()
+            elapsed = now - self._last_request_time
+            if elapsed < self._min_request_interval:
+                time.sleep(self._min_request_interval - elapsed)
+            self._last_request_time = time.monotonic()
 
     def do_translate(self, text: str) -> str:
         """Send text to the OpenAI-compatible API for translation."""
