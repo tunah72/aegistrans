@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/tunah72/aegistrans/releases/latest"><img src="https://img.shields.io/github/v/release/tunah72/aegistrans?style=flat-square" alt="Latest Release"></a>
+  <a href="https://github.com/tunah72/aegistrans/releases"><img src="https://img.shields.io/badge/Release-v0.1.0-blue?style=flat-square" alt="Release v0.1.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg?style=flat-square" alt="AGPL-3.0 License"></a>
   <img src="https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue?style=flat-square" alt="Python Versions">
   <img src="https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon)%20%7C%20Linux%20%7C%20Windows-lightgrey?style=flat-square" alt="Platforms">
@@ -76,7 +76,7 @@ Below is a side-by-side comparison from a medical textbook pilot (*Okeson – Ma
 
 Pre-built standalone desktop packages are available for macOS:
 
-1. Download the latest release: **[AegisTrans-macos.zip](https://github.com/tunah72/aegistrans/releases/latest/download/AegisTrans-macos.zip)** (~200 MB).
+1. Download the latest release: **[AegisTrans-macos.zip (v0.1.0)](https://github.com/tunah72/aegistrans/releases/download/v0.1.0/AegisTrans-macos.zip)** (or from **[GitHub Releases](https://github.com/tunah72/aegistrans/releases)**) (~200 MB).
 2. Decompress the archive and place `AegisTrans.app` in your `/Applications` directory.
 3. Launch `AegisTrans`.
 
