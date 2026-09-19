@@ -47,10 +47,10 @@ if [[ "$SKIP_ASSETS" != "true" ]]; then
     "$PYTHON" "$ROOT/scripts/fetch_assets.py"
 fi
 
-# Ensure macOS icon is present
+# Ensure macOS icon is present and in sync with icon.png
 ICNS="$ROOT/app/assets/icon.icns"
 PNG="$ROOT/app/assets/icon.png"
-if [[ ! -f "$ICNS" && -f "$PNG" ]]; then
+if [[ -f "$PNG" && (! -f "$ICNS" || "$PNG" -nt "$ICNS") ]]; then
     echo "==> Generating icon.icns from icon.png..."
     ICONSET_DIR="$ROOT/app/assets/icon.iconset"
     mkdir -p "$ICONSET_DIR"

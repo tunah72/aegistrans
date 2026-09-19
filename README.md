@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/tunah72/aegistrans/releases/latest"><img src="https://img.shields.io/github/v/release/tunah72/aegistrans?style=flat-square" alt="Latest Release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/tunah72/aegistrans?style=flat-square" alt="AGPL-3.0 License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg?style=flat-square" alt="AGPL-3.0 License"></a>
   <img src="https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue?style=flat-square" alt="Python Versions">
   <img src="https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon)%20%7C%20Linux%20%7C%20Windows-lightgrey?style=flat-square" alt="Platforms">
   <img src="https://img.shields.io/badge/Agent-Antigravity%20Plugin%20%26%20Skill-teal?style=flat-square" alt="Agent Skill Ready">
@@ -32,28 +32,31 @@
 
 ## Sample Translation Demo
 
-Below is a side-by-side comparison from a medical textbook pilot (*Okeson – Management of Temporomandibular Disorders and Occlusion*, Elsevier 8th Edition):
+Below is a three-way comparison from a medical textbook pilot (*Okeson – Management of Temporomandibular Disorders and Occlusion*, Elsevier 8th Edition):
 
 <div align="center">
   <table>
     <thead>
       <tr>
-        <th width="50%" align="center"><strong>Original English Source</strong></th>
-        <th width="50%" align="center"><strong>Vietnamese (Bilingual Terminology Mode)</strong></th>
+        <th width="33%" align="center"><strong>1. Original English Source</strong></th>
+        <th width="33%" align="center"><strong>2. Google Translate Mode (Free)</strong></th>
+        <th width="33%" align="center"><strong>3. Medical LLM (Bilingual Terminology)</strong></th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td valign="top"><img src=".github/assets/page_1_src.png" alt="Original English PDF Page" width="100%"/></td>
-        <td valign="top"><img src=".github/assets/page_1_bilingual_v2.png" alt="Translated Vietnamese PDF Page" width="100%"/></td>
+        <td valign="top"><img src=".github/assets/page_1_googletranslate.png" alt="Google Translate Mode" width="100%"/></td>
+        <td valign="top"><img src=".github/assets/page_1_bilingual_v2.png" alt="Medical LLM Bilingual Mode" width="100%"/></td>
       </tr>
     </tbody>
   </table>
 </div>
 
-### Translation Highlights
-- **Typography and Geometry:** Preserves publisher banner headers, section titles, multi-column geometries, and embedded illustrations without text clipping or abnormal line breaks.
-- **Dual-Language Terminology Retention:** Clinical anatomical, pharmacological, and biomechanical terms are rendered in standardized Vietnamese accompanied by standard English in parentheses upon introduction (e.g., `xương hàm dưới (mandible)`, `khớp thái dương hàm (temporomandibular joint – TMJ)`, `dây chằng nha chu (periodontal ligament)`). This supports concurrent subject-matter comprehension and international terminology learning.
+### Translation Highlights & Engine Comparison
+- **Strict Layout & Geometry Preservation:** Both translation modes preserve publisher header banners, multi-column geometry, figure labels (`Hình 1.1`), and mathematical placeholders (`<b0></b0>`) without text clipping or layout disruption.
+- **Google Translate Engine (Fast & Free):** Built-in multi-tier fallback API requiring zero credentials, providing instant page translations suitable for quick reading.
+- **Specialized Medical LLM Engine (Deep Academic Mode):** Employs dual-language clinical retention: specialized anatomical and pathological terms are rendered in standardized Vietnamese accompanied by standard English in parentheses (e.g., `xương hàm dưới (mandible)`, `khớp thái dương hàm (temporomandibular joint – TMJ)`, `dây chằng nha chu (periodontal ligament)`). This enables simultaneous clinical comprehension and international terminology learning.
 
 ---
 
