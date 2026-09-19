@@ -6,6 +6,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,6 +14,8 @@ permissions:
 jobs:
   macos:
     runs-on: macos-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
 
@@ -20,15 +23,22 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Check the tag matches APP_VERSION
+      - name: Resolve Release Version
+        id: version
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
           VERSION=$(python -c 'import re; print(re.search(r"^APP_VERSION = \"(.+)\"", open("app/update.py").read(), re.M).group(1))')
-          if [ "$TAG" != "$VERSION" ]; then
-            echo "Tag $TAG does not match APP_VERSION $VERSION in app/update.py" >&2
-            exit 1
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            if [ "$TAG" != "$VERSION" ]; then
+              echo "Tag $TAG does not match APP_VERSION $VERSION in app/update.py" >&2
+              exit 1
+            fi
+            RELEASE_TAG="${GITHUB_REF_NAME}"
+          else
+            RELEASE_TAG="v${VERSION}"
           fi
-          echo "Releasing $VERSION on macOS"
+          echo "tag=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "Releasing ${RELEASE_TAG} on macOS"
 
       - name: Build macOS desktop app
         run: |
@@ -57,6 +67,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ needs.macos.outputs.tag }}
           files: release-assets/*
           generate_release_notes: true
 
