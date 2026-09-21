@@ -497,8 +497,12 @@ def main(argv=None) -> int:
         )
 
         if segment_count == 0:
-            logger.error("No segments extracted from PDF")
-            return 1
+            logger.info("No translatable segments found (all pages preserved, e.g. index/diagrams). Preserving PDF...")
+            dest_pdf = output_dir / f"{input_pdf.stem}-{args.target_language}.pdf"
+            import shutil
+            shutil.copyfile(input_pdf, dest_pdf)
+            logger.info("Preserved PDF copied to: %s", dest_pdf)
+            return 0
 
         # Step 2: Translate segments
         stats, t2_elapsed = step_translate_segments(

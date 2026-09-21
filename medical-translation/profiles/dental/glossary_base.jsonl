@@ -98,3 +98,127 @@
 {"en": "shock absorber", "vi": "bộ phận giảm chấn tự nhiên", "notes": ""}
 {"en": "dentition", "vi": "bộ răng", "notes": ""}
 {"en": "masticatory system", "vi": "hệ thống nhai", "notes": ""}
+{"en": "centric occlusion", "vi": "khớp cắn trung tâm", "notes": "CO"}
+{"en": "terminal hinge axis", "vi": "trục bản lề tận cùng", "notes": "transverse horizontal axis"}
+{"en": "rotational movement", "vi": "chuyển động xoay", "notes": "rotation"}
+{"en": "translational movement", "vi": "chuyển động tịnh tiến", "notes": "translation"}
+{"en": "border movement", "vi": "chuyển động giới hạn", "notes": "Posselt envelope"}
+{"en": "border movements", "vi": "các chuyển động giới hạn", "notes": ""}
+{"en": "envelope of motion", "vi": "hình bao chuyển động", "notes": "Posselt"}
+{"en": "condylar guidance", "vi": "hướng dẫn lồi cầu", "notes": "posterior determinant"}
+{"en": "anterior determinant", "vi": "yếu tố hướng dẫn phía trước", "notes": "anterior guidance"}
+{"en": "posterior determinant", "vi": "yếu tố hướng dẫn phía sau", "notes": "condylar guidance"}
+{"en": "Bennett movement", "vi": "chuyển động Bennett", "notes": "lateral side shift"}
+{"en": "side shift", "vi": "chuyển dịch sang bên", "notes": "mandibular side shift"}
+{"en": "immediate side shift", "vi": "chuyển dịch tức thì sang bên", "notes": "ISS"}
+{"en": "progressive side shift", "vi": "chuyển dịch sang bên tiến triển", "notes": "PSS"}
+{"en": "intercondylar distance", "vi": "khoảng cách gian lồi cầu", "notes": ""}
+{"en": "curve of Spee", "vi": "đường cong Spee", "notes": "anteroposterior curvature"}
+{"en": "curve of Wilson", "vi": "đường cong Wilson", "notes": "mediolateral curvature"}
+{"en": "sphere of Monson", "vi": "mặt cầu Monson", "notes": "combined 3D curvature"}
+{"en": "mutually protected occlusion", "vi": "khớp cắn bảo vệ tương hỗ", "notes": "canine/anterior protection with posterior stops"}
+{"en": "canine-protected occlusion", "vi": "khớp cắn bảo vệ bởi răng nanh", "notes": "canine guidance"}
+{"en": "crossbite", "vi": "cắn chéo", "notes": ""}
+{"en": "anterior crossbite", "vi": "cắn chéo phía trước", "notes": ""}
+{"en": "posterior crossbite", "vi": "cắn chéo phía sau", "notes": ""}
+{"en": "open bite", "vi": "cắn hở", "notes": "anterior/posterior open bite"}
+{"en": "deep bite", "vi": "cắn sâu", "notes": "excessive overbite"}
+{"en": "edge-to-edge", "vi": "cắn đối đầu", "notes": "edge-to-edge occlusion"}
+{"en": "occlusal interference", "vi": "cản trở khớp cắn", "notes": "occlusal disharmony"}
+{"en": "occlusal interferences", "vi": "các cản trở khớp cắn", "notes": ""}
+{"en": "prematurity", "vi": "tiếp xúc sớm", "notes": "premature contact"}
+{"en": "premature contact", "vi": "tiếp xúc sớm", "notes": "initial contact in CR"}
+{"en": "premature contacts", "vi": "các điểm tiếp xúc sớm", "notes": ""}
+{"en": "centric interference", "vi": "cản trở ở tương quan trung tâm", "notes": "CR interference"}
+{"en": "working interference", "vi": "cản trở bên làm việc", "notes": "working-side contact"}
+{"en": "nonworking interference", "vi": "cản trở bên không làm việc", "notes": "balancing interference"}
+{"en": "balancing interference", "vi": "cản trở bên thăng bằng", "notes": "non-working interference"}
+{"en": "protrusive interference", "vi": "cản trở khi đưa hàm ra trước", "notes": "posterior contact in protrusion"}
+{"en": "occlusal trauma", "vi": "chấn thương khớp cắn", "notes": "trauma from occlusion"}
+{"en": "trauma from occlusion", "vi": "chấn thương do khớp cắn", "notes": "TFO"}
+{"en": "wear facet", "vi": "diện mòn khớp cắn", "notes": "attrition facet"}
+{"en": "wear facets", "vi": "các diện mòn khớp cắn", "notes": ""}
+{"en": "abfraction", "vi": "tổn thương khuyết góc răng", "notes": "cervical stress lesion"}
+{"en": "attrition", "vi": "mòn cơ học răng", "notes": "tooth-to-tooth wear"}
+{"en": "erosion", "vi": "xói mòn răng do hóa học", "notes": "chemical dissolution"}
+{"en": "abrasion", "vi": "mài mòn răng cơ học ngoại lai", "notes": "foreign body wear"}
+{"en": "retrodiscal pad", "vi": "đệm sau đĩa", "notes": "bilaminar zone"}
+{"en": "bilaminar zone", "vi": "vùng hai lá", "notes": "retrodiscal tissue"}
+{"en": "superior retrodiscal lamina", "vi": "lá sau đĩa trên", "notes": "contains elastic fibers"}
+{"en": "inferior retrodiscal lamina", "vi": "lá sau đĩa dưới", "notes": "contains collagenous fibers"}
+{"en": "collateral ligament", "vi": "dây chằng phụ", "notes": "discal ligament"}
+{"en": "collateral ligaments", "vi": "các dây chằng đĩa khớp", "notes": "discal ligaments"}
+{"en": "discal ligament", "vi": "dây chằng đĩa khớp", "notes": "medial and lateral"}
+{"en": "discal ligaments", "vi": "các dây chằng đĩa khớp", "notes": "medial and lateral"}
+{"en": "medial discal ligament", "vi": "dây chằng đĩa khớp phía trong", "notes": ""}
+{"en": "lateral discal ligament", "vi": "dây chằng đĩa khớp phía ngoài", "notes": ""}
+{"en": "capsular ligament", "vi": "dây chằng bao khớp", "notes": "encompasses TMJ"}
+{"en": "temporomandibular ligament", "vi": "dây chằng thái dương hàm", "notes": "TML, lateral ligament"}
+{"en": "stylomandibular ligament", "vi": "dây chằng trâm hàm", "notes": "accessory ligament"}
+{"en": "sphenomandibular ligament", "vi": "dây chằng bướm hàm", "notes": "accessory ligament"}
+{"en": "superior lateral pterygoid", "vi": "cơ chân bướm ngoài bó trên", "notes": "active during closing/clamping"}
+{"en": "inferior lateral pterygoid", "vi": "cơ chân bướm ngoài bó dưới", "notes": "active during opening/protrusion"}
+{"en": "articular fossa", "vi": "hố khớp", "notes": "glenoid fossa / mandibular fossa"}
+{"en": "mandibular fossa", "vi": "hố hàm", "notes": "glenoid fossa"}
+{"en": "glenoid fossa", "vi": "hố chảo", "notes": "articular fossa of temporal bone"}
+{"en": "internal derangement", "vi": "rối loạn nội khớp thái dương hàm", "notes": "disc-condyle incoordination"}
+{"en": "subluxation", "vi": "bán trật khớp", "notes": "partial dislocation"}
+{"en": "dislocation", "vi": "trật khớp", "notes": "complete condylar displacement over eminence"}
+{"en": "open lock", "vi": "kẹt hàm khi há miệng", "notes": "inability to close mouth"}
+{"en": "closed lock", "vi": "kẹt hàm khi ngậm miệng", "notes": "inability to open mouth, disc without reduction"}
+{"en": "disc perforation", "vi": "thủng đĩa khớp", "notes": "loss of disc integrity"}
+{"en": "adherence", "vi": "dính khớp tạm thời", "notes": "stickiness between disc and fossa"}
+{"en": "adhesion", "vi": "dính khớp sợi", "notes": "fibrous band formation"}
+{"en": "adhesions", "vi": "các dải dính khớp sợi", "notes": "fibrous adhesion bands"}
+{"en": "osteophyte", "vi": "gai xương", "notes": "bony spur in degenerative joint disease"}
+{"en": "osteophytes", "vi": "các gai xương", "notes": ""}
+{"en": "condylar remodeling", "vi": "sự tái cấu trúc lồi cầu", "notes": "adaptive bone changes"}
+{"en": "condylar resorption", "vi": "tiêu lồi cầu", "notes": "idiopathic or inflammatory bone loss"}
+{"en": "coronoid hyperplasia", "vi": "phì đại mỏm vẹt", "notes": "causes restricted opening"}
+{"en": "trismus", "vi": "khít hàm", "notes": "limited jaw opening due to muscle spasm"}
+{"en": "protective co-contraction", "vi": "sự co thắt cơ bảo vệ", "notes": "muscle splinting"}
+{"en": "muscle splinting", "vi": "co thắt cơ bảo vệ", "notes": "protective co-contraction"}
+{"en": "local muscle soreness", "vi": "đau nhức cơ cục bộ", "notes": "noninflammatory muscle pain"}
+{"en": "myospasm", "vi": "co rút cơ giật cứng", "notes": "involuntary tonic contraction"}
+{"en": "centrally mediated myalgia", "vi": "đau cơ nguồn gốc trung ương", "notes": "chronic neurogenic muscle pain"}
+{"en": "fibromyalgia", "vi": "đau xơ cơ", "notes": "widespread musculoskeletal pain"}
+{"en": "taut band", "vi": "dải căng cứng", "notes": "palpable band containing trigger point"}
+{"en": "palpation tenderness", "vi": "đau khi sờ nắn", "notes": "clinical pain on pressure"}
+{"en": "stabilization appliance", "vi": "máng nhai ổn định", "notes": "flat plane occlusal splint"}
+{"en": "anterior repositioning appliance", "vi": "máng định vị hàm dưới ra trước", "notes": "repositioning splint"}
+{"en": "anterior bite plane", "vi": "máng cắn phía trước", "notes": "discludes posterior teeth"}
+{"en": "posterior bite plane", "vi": "máng cắn phía sau", "notes": "pivoting or discluding anterior teeth"}
+{"en": "pivot appliance", "vi": "máng điểm tựa", "notes": "reduces joint loading"}
+{"en": "soft appliance", "vi": "máng mềm", "notes": "resilient splint"}
+{"en": "articulator", "vi": "giá khớp", "notes": "semi-adjustable or fully adjustable"}
+{"en": "articulators", "vi": "các giá khớp", "notes": "mechanical simulation instruments"}
+{"en": "facebow", "vi": "cung mặt", "notes": "records maxillary relationship to hinge axis"}
+{"en": "mounting casts", "vi": "vô giá khớp", "notes": "mounting dental casts"}
+{"en": "selective grinding", "vi": "mài điều chỉnh khớp cắn chọn lọc", "notes": "occlusal equilibration"}
+{"en": "occlusal adjustment", "vi": "điều chỉnh khớp cắn", "notes": "selective grinding"}
+{"en": "rule of thirds", "vi": "quy tắc một phần ba", "notes": "assesses horizontal condylar shift and cusp relation"}
+{"en": "periodontal mechanoreceptor", "vi": "thụ thể cơ học nha chu", "notes": "sensory input from PDL"}
+{"en": "periodontal mechanoreceptors", "vi": "các thụ thể cơ học nha chu", "notes": ""}
+{"en": "muscle spindle", "vi": "suốt cơ", "notes": "stretch receptor in muscle"}
+{"en": "muscle spindles", "vi": "các suốt cơ", "notes": ""}
+{"en": "Golgi tendon organ", "vi": "thụ thể gân Golgi", "notes": "tension receptor"}
+{"en": "Golgi tendon organs", "vi": "các thụ thể gân Golgi", "notes": ""}
+{"en": "joint receptor", "vi": "thụ thể khớp", "notes": "mechanoreceptor in joint capsule"}
+{"en": "joint receptors", "vi": "các thụ thể khớp", "notes": ""}
+{"en": "jaw jerk reflex", "vi": "phản xạ giật hàm", "notes": "myotatic reflex"}
+{"en": "myotatic reflex", "vi": "phản xạ căng cơ", "notes": "stretch reflex"}
+{"en": "nociceptive reflex", "vi": "phản xạ thụ cảm đau", "notes": "flexor / jaw opening reflex"}
+{"en": "sleep bruxism", "vi": "nghiến răng khi ngủ", "notes": "nocturnal parafunction"}
+{"en": "awake bruxism", "vi": "nghiến răng khi thức", "notes": "daytime clenching"}
+{"en": "somatosensory system", "vi": "hệ thống cảm giác thân thể", "notes": "tactile and pain pathways"}
+{"en": "central sensitization", "vi": "sự nhạy cảm hóa trung ương", "notes": "amplified dorsal horn/brainstem pain processing"}
+{"en": "peripheral sensitization", "vi": "sự nhạy cảm hóa ngoại vi", "notes": "lowered threshold of nociceptors"}
+{"en": "allodynia", "vi": "tăng cảm giác đau do kích thích không đau", "notes": "pain from normally non-painful stimulus"}
+{"en": "hyperalgesia", "vi": "tăng đau", "notes": "exaggerated pain response"}
+{"en": "trigeminal neuralgia", "vi": "đau dây thần kinh sinh ba", "notes": "tic douloureux"}
+{"en": "postherpetic neuralgia", "vi": "đau thần kinh sau zona", "notes": "chronic neuropathic pain"}
+{"en": "biopsychosocial model", "vi": "mô hình sinh học - tâm lý - xã hội", "notes": "integrated diagnostic approach"}
+{"en": "Axis I", "vi": "Trục I", "notes": "physical/biological diagnosis in DC/TMD"}
+{"en": "Axis II", "vi": "Trục II", "notes": "psychosocial assessment in DC/TMD"}
+{"en": "Diagnostic Criteria for Temporomandibular Disorders", "vi": "Tiêu chuẩn Chẩn đoán Rối loạn Thái dương Hàm", "notes": "DC/TMD"}
+{"en": "Research Diagnostic Criteria for Temporomandibular Disorders", "vi": "Tiêu chuẩn Chẩn đoán Nghiên cứu Rối loạn Thái dương Hàm", "notes": "RDC/TMD"}

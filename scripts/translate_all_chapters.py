@@ -81,6 +81,11 @@ def parse_args(argv=None):
         action="store_true",
         help="Only translate chapters, do not merge final PDF",
     )
+    parser.add_argument(
+        "--force-retranslate",
+        action="store_true",
+        help="Re-translate all chapters, ignoring existing completed PDFs",
+    )
     return parser.parse_args(argv)
 
 
@@ -121,6 +126,13 @@ def main(argv=None) -> int:
         ch_output = base_output / ch_name
         ch_output.mkdir(parents=True, exist_ok=True)
 
+        # Check if already completed
+        out_candidates = list(ch_output.glob("*-vi.pdf"))
+        if out_candidates and not args.force_retranslate:
+            print(f"\n✓ [{idx}/{total_chapters}] Chapter already completed: {out_candidates[0].name}")
+            translated_pdfs.append(out_candidates[0])
+            continue
+
         print(f"\n>>> [{idx}/{total_chapters}] Translating: {chapter_pdf.name}")
         ch_start = time.time()
 
@@ -134,7 +146,10 @@ def main(argv=None) -> int:
             str(args.profile),
             "--concurrency",
             str(args.concurrency),
+            "--overwrite",
         ]
+        if args.force_retranslate:
+            cmd.append("--force-retranslate")
         if args.system_prompt:
             cmd.extend(["--system-prompt", str(args.system_prompt)])
         if args.glossary:

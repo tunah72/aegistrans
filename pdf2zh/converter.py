@@ -140,6 +140,7 @@ class Paragraph:
         is_italic=False,
         fontname="",
         color_op="0 g ",
+        cls=0,
     ):
         self.y: float = y
         self.x: float = x
@@ -153,6 +154,7 @@ class Paragraph:
         self.is_italic: bool = is_italic
         self.fontname: str = fontname
         self.color_op: str = color_op
+        self.cls: int = cls
 
 
 # fmt: off
@@ -308,11 +310,12 @@ class TranslateConverter(PDFConverterEx):
                         vfix = 0
                 if not vstk:
                     is_b, is_i = detect_font_style(child.fontname, child.size)
+                    target_cls = pstk[-1].cls if pstk else cls
+                    effective_cls = cls if cls > 0 else target_cls
                     is_same_line = (
                         xt is not None
                         and len(pstk) > 0
-                        and cls == xt_cls
-                        and cls > 0
+                        and (cls == xt_cls or (effective_cls > 0 and target_cls > 0 and abs(child.size - pstk[-1].size) <= 1.5))
                         and abs(child.y0 - xt.y0) <= max(pstk[-1].size, child.size) * 0.45
                         and child.x0 >= xt.x0 - 2.0
                         and abs(child.size - pstk[-1].size) <= 3.0
@@ -322,7 +325,7 @@ class TranslateConverter(PDFConverterEx):
                         and len(pstk) > 0
                         and child.x1 < xt.x0
                         and 0.3 * pstk[-1].size <= abs(child.y0 - xt.y0) <= pstk[-1].size * 1.6
-                        and cls > 0 and xt_cls > 0 and cls == xt_cls
+                        and (cls > 0 or xt_cls > 0 or target_cls > 0)
                     )
                     continue_wrap = False
                     if is_wrap_cand:
@@ -334,8 +337,18 @@ class TranslateConverter(PDFConverterEx):
                             child.x0 > pstk[-1].x0 + 7.0
                             and sstk[-1].rstrip().endswith((".", ":", "!", "?", "”", '"', "—", "–"))
                         )
-                        if not prev_is_h and not curr_is_h and not diff_size and not diff_fam and not is_indent:
-                            continue_wrap = True
+                        prev_is_caption = bool(re.match(r"^(•\s*)?(Fig|Figure|Table)\b", sstk[-1].strip(), re.IGNORECASE))
+                        h_mismatch = (prev_is_h != curr_is_h) and not prev_is_caption
+                        if prev_is_caption:
+                            diff_fam = False
+                        same_col = abs(child.x0 - pstk[-1].x0) <= 25.0 or abs(child.x0 - pstk[-1].x) <= 25.0
+                        if not h_mismatch and not diff_size and not diff_fam and not is_indent:
+                            if cls == xt_cls or cls == target_cls or xt_cls == target_cls:
+                                continue_wrap = True
+                            elif same_col:
+                                prev_ended = sstk[-1].rstrip().endswith((".", ":", "!", "?", "”", '"'))
+                                if not prev_ended:
+                                    continue_wrap = True
 
                     if is_same_line or continue_wrap:
                         if child.x1 < xt.x0:
@@ -343,10 +356,12 @@ class TranslateConverter(PDFConverterEx):
                             pstk[-1].brk = True
                         elif child.x0 > xt.x1 + 1:
                             sstk[-1] += " "
+                        if child.get_text().strip() and cls > 0:
+                            pstk[-1].cls = cls
                     else:
                         c_op = detect_color_op(child)
                         sstk.append("")
-                        pstk.append(Paragraph(child.y0, child.x0, child.x0, child.x0, child.y0, child.y1, child.size, False, is_b, is_i, child.fontname, c_op))
+                        pstk.append(Paragraph(child.y0, child.x0, child.x0, child.x0, child.y0, child.y1, child.size, False, is_b, is_i, child.fontname, c_op, cls=cls))
                 if not cur_v:
                     if len(sstk[-1].strip()) == 0 and child.get_text().strip():
                         pstk[-1].x = child.x0
@@ -376,7 +391,8 @@ class TranslateConverter(PDFConverterEx):
                 pstk[-1].y0 = min(pstk[-1].y0, child.y0)
                 pstk[-1].y1 = max(pstk[-1].y1, child.y1)
                 xt = child
-                xt_cls = cls
+                if child.get_text().strip() and cls > 0:
+                    xt_cls = cls
             elif isinstance(child, LTFigure):
                 pass
             elif isinstance(child, LTLine):

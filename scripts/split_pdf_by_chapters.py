@@ -40,13 +40,12 @@ def extract_chapters_from_pdf(
     # Filter to chapters specifically
     chapters = []
     for i, (lvl, title, start_page) in enumerate(major_entries):
-        # Identify chapter pattern (e.g. '1 - ...' or 'Chapter 1' or 'Part I')
         is_chapter = bool(
             re.match(r"^\d+\s*[-–]\s*", title)
             or re.match(r"^Chapter\s+\d+", title, re.IGNORECASE)
-            or re.match(r"^[IVXLCDM]+\s*[-–]\s*", title)
         )
-        if is_chapter:
+        is_index = bool(re.match(r"^Index\b", title, re.IGNORECASE))
+        if is_chapter or is_index:
             chapters.append({"title": title, "start_page": start_page})
 
     # Deduplicate by start page
@@ -58,6 +57,13 @@ def extract_chapters_from_pdf(
             seen_pages.add(c["start_page"])
 
     unique_chapters.sort(key=lambda x: x["start_page"])
+
+    # Prepend Front Matter if the first chapter does not begin on page 1
+    if unique_chapters and unique_chapters[0]["start_page"] > 1:
+        unique_chapters.insert(0, {
+            "title": "Front Matter",
+            "start_page": 1,
+        })
 
     # Determine end pages
     results = []
